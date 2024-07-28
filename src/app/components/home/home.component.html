@@ -1,0 +1,72 @@
+<div class="container">
+  <form [formGroup]="homeForm" (ngSubmit)="onSubmit()" class="form">
+    <h1>Lock & GO</h1>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Site / App (low case)</mat-label>
+      <input matInput type="text" formControlName="service">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Username / Email</mat-label>
+      <input matInput type="text" formControlName="username">
+    </mat-form-field>
+
+    <mat-form-field appearance="fill">
+      <mat-label>Have stolen (min. 0)</mat-label>
+      <input matInput type="number" formControlName="stolen">
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Password (NOT the site one)</mat-label>
+      <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password">
+      <button mat-icon-button matSuffix (click)="clickEventPassword($event)" [attr.aria-label]="hidePassword ? 'Show password' : 'Hide password'" [attr.aria-pressed]="hidePassword" type="button">
+        <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+      </button>
+    </mat-form-field>
+    
+    <div class="error-message" *ngIf="passwordInvalid">
+      <ul>
+        <li class="list-title"><strong>Password must contain:</strong></li>
+        <li>Be at least 8 characters in length.</li>
+        <li>Contain lowercase letters (a-z).</li>
+        <li>Contain uppercase letters (A-Z).</li>
+        <li>Contain numbers (0-9).</li>
+        <li>Contain special characters (!#$%&'()*+,-./:...).</li>
+      </ul>
+    </div>
+
+    <div class="button-container">
+      <button mat-raised-button color="primary" type="submit" [disabled]="homeForm.invalid || formInvalid">
+        Generate
+      </button>
+      <button mat-mini-fab (click)="clickEventSettings($event)" type="button">
+        <mat-icon color="primary">settings</mat-icon>
+      </button>
+    </div>
+
+    <div></div>
+
+    <div *ngIf="!hideSettings" class="options-container">
+      <mat-form-field>
+        <mat-label>Password length (512)</mat-label>
+        <input matInput type="number" formControlName="passwordLength">
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Special characters</mat-label>
+        <mat-select formControlName="selectedSpecialCharacters" multiple>
+          <mat-option *ngFor="let specialcharacter of specialcharacters" [value]="specialcharacter">{{ specialcharacter }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div *ngIf="!hideFinalPassword" class="password-container">
+      <p>{{ finalPassword }}</p>
+      <button mat-mini-fab matTooltip="Copy" (click)="clickEventCopy($event)" type="button">
+        <mat-icon [color]="isPrimary ? 'primary' : 'secondary'">content_copy</mat-icon>
+      </button>
+    </div>
+  </form>
+</div>
+
